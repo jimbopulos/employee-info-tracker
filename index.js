@@ -19,10 +19,11 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
     if (err) throw err;
-    init();
+    // init();
   });
 
 // init function to begin inquirer
+
 
 // query functions
     // View Departments
