@@ -17,6 +17,13 @@ const connection = mysql.createConnection({
     database: 'employeeDB',
 });
 
+connection.connect((err) => {
+    if (err) throw err;
+    init();
+  });
+
+// init function to begin inquirer
+
 // query functions
     // View Departments
     function viewDepartments() {
@@ -26,7 +33,11 @@ const connection = mysql.createConnection({
             connection.end();
         });
     };
-viewDepartments();
+
+    // View Roles
+    // View Employees
+
+    // EXIT
 
 // prompt for user (inquirer)
     // what would you like to do?
@@ -36,6 +47,8 @@ viewDepartments();
         // role
     // view
         // departments 
+        viewDepartments();
         // roles
         // employees
     // update employee roles
+    // EXIT
