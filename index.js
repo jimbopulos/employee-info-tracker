@@ -2,6 +2,7 @@
 const fs = require("fs");
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const { allowedNodeEnvironmentFlags } = require("process");
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -19,11 +20,67 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
     if (err) throw err;
-    // init();
+    init();
   });
 
 // init function to begin inquirer
+const init = () => {
+    inquirer
+        .prompt({
+            name: 'action',
+            type: 'list',
+            message: 'What would you like to do?',
+            choices: [
+                'View departments',
+                'View roles',
+                'View employees',
+                'Add a department',
+                'Add a role',
+                'Add an employee',
+                'Update an employee role',
+                'Exit',
+            ],
+        })
+        .then((input) => {
+            switch (input.action) {
+                case 'View departments':
+                    viewDepartments();
+                    break;
+                
+                case 'View roles':
+                    viewRoles();
+                    break;
+                
+                case 'View employees':
+                    viewEmployees();
+                    break;
 
+                case 'Add a department':
+                    addDepartment();
+                    break;
+
+                case 'Add a role':
+                    addRole();
+                    break;
+                
+                case 'Add an employee':
+                    addEmployee();
+                    break;
+
+                case 'Update an employee role':
+                    updateRole();
+                    break;
+                
+                case 'Exit':
+                    exit();
+                    break;
+
+                default:
+                    console.log(`Couldn't execute: ${input.action}`);
+                    break;
+            }
+        });
+};
 
 // query functions
     // View Departments
@@ -31,7 +88,7 @@ connection.connect((err) => {
         connection.query('SELECT * FROM department', (err, res) => {
             if (err) throw err;
             console.table(res);
-            connection.end();
+            init();
         });
     };
 
@@ -39,17 +96,22 @@ connection.connect((err) => {
     // View Employees
 
     // EXIT
+    function exit() {
+        connection.end();
+    }
 
 // prompt for user (inquirer)
     // what would you like to do?
     // add
         // department
-        // employee
         // role
+        // employee
+        // init
     // view
         // departments 
-        viewDepartments();
         // roles
         // employees
+        // init
     // update employee roles
-    // EXIT
+        // init
+    // EXIT (connection.end)
