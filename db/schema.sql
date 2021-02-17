@@ -30,8 +30,6 @@ SELECT * FROM role;
 SELECT * FROM employee;
 
 -- INSERT DATA into tables
--- INSERT INTO products (flavor, price, quantity)
--- VALUES ("vanilla", 2.50, 100);
 
 -- JOIN tables
 -- SELECT * FROM table ... (WHERE)

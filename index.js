@@ -25,25 +25,31 @@ connection.connect((err) => {
   });
 
 // init function to begin inquirer
+// prompt for user (inquirer)
 const init = () => {
     inquirer
         .prompt({
             name: 'action',
             type: 'list',
+            // what would you like to do?
             message: 'What would you like to do?',
             choices: [
+                // view
                 'View departments',
                 'View roles',
                 'View employees',
+                // add
                 'Add a department',
                 'Add a role',
                 'Add an employee',
+                // update employee roles
                 'Update an employee role',
+                // EXIT (connection.end)
                 'Exit',
             ],
         })
-        .then((input) => {
-            switch (input.action) {
+        .then(async answer => {
+            switch (answer.action) {
                 case 'View departments':
                     viewDepartments();
                     break;
@@ -57,19 +63,19 @@ const init = () => {
                     break;
 
                 case 'Add a department':
-                    addDepartment();
+                await addDepartment();
                     break;
 
                 case 'Add a role':
-                    addRole();
+                await addRole();
                     break;
                 
                 case 'Add an employee':
-                    addEmployee();
+                await addEmployee();
                     break;
 
                 case 'Update an employee role':
-                    updateRole();
+                await updateRole();
                     break;
                 
                 case 'Exit':
@@ -77,7 +83,7 @@ const init = () => {
                     break;
 
                 default:
-                    console.log(`Couldn't execute: ${input.action}`);
+                    console.log(`Couldn't execute: ${answer.action}`);
                     break;
             }
         });
@@ -103,24 +109,44 @@ const viewRoles = () => {
 };
 
 // View Employees
+const viewEmployees = () => {
+    connection.query('SELECT * FROM employee', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        init();
+    });
+};
+
+// Add departments
+const addDepartment = () => {
+    inquirer
+        .prompt({
+            name: 'newDepartment',
+            type: 'input',
+            message: 'What department would you like to add?',
+        })
+        .then((answer) => {
+            const query = 'INSERT INTO department SET ?';
+            connection.query(query, { name: answer.newDepartment }, (err, res) => {
+                if (err) throw err;
+                console.log(`${answer.newDepartment} department added!`);
+                init();
+            })
+        })
+};
+// init 
+
+// Add roles
+// init
+
+// Add employees
+// init
+
+// Update employee roles
+    // init
 
 // EXIT
 const exit = () => {
     connection.end();
 }
 
-// prompt for user (inquirer)
-    // what would you like to do?
-    // add
-        // department
-        // role
-        // employee
-        // init
-    // view
-        // departments 
-        // roles
-        // employees
-        // init
-    // update employee roles
-        // init
-    // EXIT (connection.end)
