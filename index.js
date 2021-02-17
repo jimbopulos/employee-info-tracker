@@ -28,7 +28,7 @@ connection.connect((err) => {
 // prompt for user (inquirer)
 const init = () => {
     inquirer
-        .prompt({
+        .prompt([{
             name: 'action',
             type: 'list',
             // what would you like to do?
@@ -47,7 +47,7 @@ const init = () => {
                 // EXIT (connection.end)
                 'Exit',
             ],
-        })
+        }])
         .then(async answer => {
             switch (answer.action) {
                 case 'View departments':
@@ -92,7 +92,7 @@ const init = () => {
 // query functions
 // View Departments
 const viewDepartments = () => {
-    connection.query('SELECT * FROM department', (err, res) => {
+    return connection.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
         console.table(res);
         init();
@@ -120,11 +120,11 @@ const viewEmployees = () => {
 // Add departments
 const addDepartment = () => {
     inquirer
-        .prompt({
+        .prompt([{
             name: 'newDepartment',
             type: 'input',
             message: 'What department would you like to add?',
-        })
+        }])
         .then((answer) => {
             const query = 'INSERT INTO department SET ?';
             connection.query(query, { name: answer.newDepartment }, (err, res) => {
@@ -136,10 +136,21 @@ const addDepartment = () => {
 };
 
 // Add roles
-const addRole = () => {
-    inquirer
+const addRole = async () => {
+    const departmentList = [];
+    await connection.query('SELECT * FROM department', (err, res) => {
+        res.forEach(({ name, id }) => {
+            departmentList.push({ 
+                name: name, 
+                value: id 
+            });
+          });
+          // return departmentList;
+    });
+    console.log(departmentList);
+    await inquirer
         .prompt(
-        {
+        [{
             name: 'newRole',
             type: 'input',
             message: 'What role would you like to add?',
@@ -151,15 +162,11 @@ const addRole = () => {
         },
         {
             name: 'department',
-            type: 'rawlist',
-            choices: [
-                'Engineering',
-                'Sales',
-                'Finance',
-                'Legal',
-            ],
+            type: 'list',
+            choices: departmentList,
             message: 'To which department will this role belong?',
-        })
+        }
+        ])
         .then((answer) => {
             const query = 'INSERT INTO role SET ?';
             connection.query(query, 
@@ -168,16 +175,18 @@ const addRole = () => {
                     salary: answer.newSalary,
                     department_id: answer.department,
                 }, 
-                (err, res) => {
+                async (err, res) => {
                 if (err) throw err;
                 console.log(`${answer.newRole} role added!`);
-                init();
+                await init();
             });
         });
 };
-// init
 
 // Add employees
+const addEmployee = () => {
+    
+}
 // init
 
 // Update employee roles
