@@ -131,12 +131,50 @@ const addDepartment = () => {
                 if (err) throw err;
                 console.log(`${answer.newDepartment} department added!`);
                 init();
-            })
-        })
+            });
+        });
 };
-// init 
 
 // Add roles
+const addRole = () => {
+    inquirer
+        .prompt(
+        {
+            name: 'newRole',
+            type: 'input',
+            message: 'What role would you like to add?',
+        },
+        {
+            name: 'newSalary',
+            type: 'input',
+            message: 'What salary will this role earn?',
+        },
+        {
+            name: 'department',
+            type: 'rawlist',
+            choices: [
+                'Engineering',
+                'Sales',
+                'Finance',
+                'Legal',
+            ],
+            message: 'To which department will this role belong?',
+        })
+        .then((answer) => {
+            const query = 'INSERT INTO role SET ?';
+            connection.query(query, 
+                { 
+                    title: answer.newRole,
+                    salary: answer.newSalary,
+                    department_id: answer.department,
+                }, 
+                (err, res) => {
+                if (err) throw err;
+                console.log(`${answer.newRole} role added!`);
+                init();
+            });
+        });
+};
 // init
 
 // Add employees
