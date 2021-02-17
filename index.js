@@ -18,6 +18,7 @@ const connection = mysql.createConnection({
     database: 'employeeDB',
 });
 
+// establish connect, run init function
 connection.connect((err) => {
     if (err) throw err;
     init();
@@ -83,22 +84,30 @@ const init = () => {
 };
 
 // query functions
-    // View Departments
-    function viewDepartments() {
-        connection.query('SELECT * FROM department', (err, res) => {
-            if (err) throw err;
-            console.table(res);
-            init();
-        });
-    };
+// View Departments
+const viewDepartments = () => {
+    connection.query('SELECT * FROM department', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        init();
+    });
+};
 
-    // View Roles
-    // View Employees
+// View Roles
+const viewRoles = () => {
+    connection.query('SELECT * FROM role', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        init();
+    });
+};
 
-    // EXIT
-    function exit() {
-        connection.end();
-    }
+// View Employees
+
+// EXIT
+const exit = () => {
+    connection.end();
+}
 
 // prompt for user (inquirer)
     // what would you like to do?
