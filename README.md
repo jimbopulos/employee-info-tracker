@@ -21,6 +21,8 @@ Clone this repository to your local machine, and then open in your editor. Open 
 
 Once in your editor's terminal, initialize the application and choose your action.
 
+- Note: You will also need to change the password for the database path in index.js to your own password in order for it to run.
+
 To run the app, enter the following into your terminal:
 
 ```md
